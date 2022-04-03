@@ -1,21 +1,27 @@
 version: '3.4'
 
 services:
-  dictionary.webapi:
-    image: ${DOCKER_REGISTRY-}dictionarywebapi
+  crossword.webapi:
+    image: ${DOCKER_REGISTRY-}crosswordwebapi
     build:
       context: .
       dockerfile: Crossword.WebAPI/Dockerfile
 
-  game.webapi:
-    image: ${DOCKER_REGISTRY-}gamewebapi
+  term.webapi:
+    image: ${DOCKER_REGISTRY-}termwebapi
     build:
       context: .
       dockerfile: Term.WebAPI/Dockerfile
-  
+    depends_on:
+        - db
+
   db:
     image: mcr.microsoft.com/mssql/server  
     hostname: 'sqlserver'  
     environment:  
       ACCEPT_EULA: Y  
       SA_PASSWORD: "123456S3NH4S3CR3T4P@SSW0RD123456"
+    ports:  
+      - '1433:1433'  
+    expose:  
+      - 1433

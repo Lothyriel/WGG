@@ -7,12 +7,13 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Dictionary.WebAPI/Term.WebAPI.csproj", "Dictionary.WebAPI/"]
-COPY ["Game.Application/Crossword.Application.csproj", "Game.Application/"]
-COPY ["Game.Domain/Crossword.Domain.csproj", "Game.Domain/"]
-RUN dotnet restore "Dictionary.WebAPI/Term.WebAPI.csproj"
+COPY ["Term.WebAPI/Term.WebAPI.csproj", "Term.WebAPI/"]
+COPY ["Term.Application/Term.Application.csproj", "Term.Application/"]
+COPY ["Term.Infra/Term.Infra.csproj", "Term.Infra/"]
+COPY ["Term.Domain/Term.Domain.csproj", "Term.Domain/"]
+RUN dotnet restore "Term.WebAPI/Term.WebAPI.csproj"
 COPY . .
-WORKDIR "/src/Dictionary.WebAPI"
+WORKDIR "/src/Term.WebAPI"
 RUN dotnet build "Term.WebAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish

@@ -1,27 +1,31 @@
 ﻿using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infra
 {
     public class TermRepository : ITermRepository
     {
-        public TermRepository(TermContext gameContext)
-        {
-            _crosswordContext = gameContext;
-        }
+        private readonly TermContext _termContext;
 
-        private readonly TermContext _crosswordContext;
+        public TermRepository(TermContext termContext)
+        {
+            _termContext = termContext;
+        }
 
         public async Task Add(Term term)
         {
-            await _crosswordContext.Terms.AddAsync(term);
+            await _termContext.Terms.AddAsync(term);
+            await _termContext.SaveChangesAsync();
+        }
+
+        public async Task<Term?> GetByWord(string word)
+        {
+            return await _termContext.Terms.Where(w => w.Word == word).FirstOrDefaultAsync();
         }
 
         public async Task<Term> GetRandom()
         {
-            var count = _crosswordContext.Terms.Count();
-            var random = Random.Shared.Next(count);
-
-            return await Task.Run(() => _crosswordContext.Terms.ElementAt(random));
+            return await _termContext.Terms.OrderBy(c => Guid.NewGuid()).FirstAsync();
         }
     }
 }

@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Term.Domain\Term.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

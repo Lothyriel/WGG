@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application
 {
-    public record AddTermRequest : IRequest<Unit>
+    public record AddTermRequest : IRequest<bool>
     {
         public AddTermRequest(Term term)
         {
@@ -13,7 +13,7 @@ namespace Application
         public Term Term { get; }
     }
 
-    public class AddTermHandler : IRequestHandler<AddTermRequest>
+    public class AddTermHandler : IRequestHandler<AddTermRequest, bool>
     {
         public AddTermHandler(ITermRepository repository)
         {
@@ -22,10 +22,13 @@ namespace Application
 
         private readonly ITermRepository _repository;
 
-        public Task<Unit> Handle(AddTermRequest request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AddTermRequest request, CancellationToken cancellationToken)
         {
-            _repository.Add(request.Term);
-            return Unit.Task;
+            if (await _repository.GetByWord(request.Term.Word) is not null)
+                return false;
+
+            await _repository.Add(request.Term);
+            return true;
         }
     }
 }
