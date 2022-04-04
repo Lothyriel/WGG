@@ -23,9 +23,9 @@ namespace Infra
             return await _termContext.Terms.Where(w => w.Word == word).FirstOrDefaultAsync();
         }
 
-        public async Task<Term> GetRandom()
+        public async Task<List<Term>> GetRandom(int count = 1)
         {
-            return await _termContext.Terms.OrderBy(c => Guid.NewGuid()).FirstAsync();
+            return await _termContext.Terms.OrderBy(c => Guid.NewGuid()).Take(count).ToListAsync();
         }
     }
 }

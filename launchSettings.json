@@ -3,8 +3,8 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "composeLaunchAction": "LaunchBrowser",
-      "composeLaunchServiceName": "term.webapi",
-      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
+      "composeLaunchServiceName": "crossword.webapi",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger/index.html",
       "commandVersion": "1.0",
       "serviceActions": {
         "crossword.webapi": "StartDebugging",

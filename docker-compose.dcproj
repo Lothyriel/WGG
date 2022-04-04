@@ -6,7 +6,9 @@
     <ProjectGuid>88a12bcd-4e4d-4b31-b296-b061407563f8</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>crossword.webapi</DockerServiceName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DockerServiceName>term.webapi</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

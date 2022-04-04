@@ -6,6 +6,16 @@ services:
     build:
       context: .
       dockerfile: Crossword.WebAPI/Dockerfile
+    depends_on:
+      - term.webapi
+    ports:  
+      - '25566:25566'  
+    expose:  
+      - 25566
+    networks:
+        default:
+            aliases:
+              - crossword.webapi
 
   term.webapi:
     image: ${DOCKER_REGISTRY-}termwebapi
@@ -13,7 +23,15 @@ services:
       context: .
       dockerfile: Term.WebAPI/Dockerfile
     depends_on:
-        - db
+      - db
+    ports:  
+      - '25565:25565'  
+    expose:  
+      - 25565
+    networks:
+        default:
+            aliases:
+              - term.webapi
 
   db:
     image: mcr.microsoft.com/mssql/server  

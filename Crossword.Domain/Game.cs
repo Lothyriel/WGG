@@ -2,6 +2,8 @@
 {
     public class Game
     {
+        public const int WordsConstant = 2;
+
         private Game()
         {
             Sections = new();
@@ -10,19 +12,25 @@
         public int Height { get; }
         public List<Section> Sections { get; }
 
-        private Point TryAdd(Term term)
+        private bool TryAdd(Term term)
         {
-            throw new Exception();
-            return null;
+            var point = new Point(0, 0, Direction.Right);
+            Sections.Add(new Section(term, point));
+
+            return true;
         }
 
-        public static Game Generate()
+        public static Game? Generate(List<Term> terms, int wordCount)
         {
-            var wordCount = Random.Shared.Next(30, 41);
+            if (terms.Count * WordsConstant < wordCount)
+                return null;
+
             var game = new Game();
 
             while (wordCount < game.Sections.Count)
-                game.TryAdd(null);
+            {
+                terms.RemoveAll(t => game.TryAdd(t));
+            }
 
             return game;
         }

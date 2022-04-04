@@ -6,6 +6,6 @@ namespace Infra
     {
         Task Add(Term term);
         Task<Term?> GetByWord(string word);
-        Task<Term> GetRandom();
+        Task<List<Term>> GetRandom(int count = 1);
     }
 }

@@ -10,7 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 builder.Services.AddMediatR(typeof(TermHandler));
 builder.Services.AddDbContext<TermContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddScoped<ITermRepository, TermRepository>();
 
 var app = builder.Build();
@@ -21,12 +21,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseCors(/*x => x.AllowAnyOrigin()*/);
 
-app.MapGet("/randomTerm", async (IMediator mediator) =>
+app.MapGet("/randomTerm", async (IMediator mediator, int? count) =>
 {
-    return await mediator.Send(new TermRequest());
+    var terms = await mediator.Send(new TermRequest(count ?? 1));
+
+    return terms is not null ? Results.Ok(terms) : Results.BadRequest();
 })
 .WithName("Random term");
 
@@ -34,7 +35,7 @@ app.MapPost("/addTerm", async (IMediator mediator, Term term) =>
 {
     var result = await mediator.Send(new AddTermRequest(term));
 
-    return result ? Results.Ok(result) : Results.Conflict("Word already defined!");
+    return result ? Results.Ok("Word Added!") : Results.Conflict("Word already defined!");
 })
 .WithName("Add Term");
 

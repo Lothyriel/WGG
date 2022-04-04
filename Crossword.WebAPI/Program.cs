@@ -15,12 +15,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseCors(/*x => x.AllowAnyOrigin()*/);
 
-app.MapGet("/newGame", async (IMediator mediator) =>
+app.MapGet("/newGame", async (IMediator mediator, int? wordsCount) =>
 {
-    return await mediator.Send(new CrosswordRequest());
+    var game = await mediator.Send(new CrosswordRequest(wordsCount ?? 30));
+
+    return game is not null ? Results.Ok(game) : Results.BadRequest();
 })
 .WithName("New Game");
 

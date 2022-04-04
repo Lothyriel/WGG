@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application
 {
-    public class TermHandler : IRequestHandler<TermRequest, Term>
+    public class TermHandler : IRequestHandler<TermRequest, List<Term>?>
     {
         public TermHandler(ITermRepository repository)
         {
@@ -13,10 +13,13 @@ namespace Application
 
         private readonly ITermRepository _repository;
 
-        public async Task<Term> Handle(TermRequest request, CancellationToken cancellationToken)
+        public async Task<List<Term>?> Handle(TermRequest request, CancellationToken cancellationToken)
         {
-            return await _repository.GetRandom();
+            if(request.TermsCount < 1)
+                return null;
+
+            return await _repository.GetRandom(request.TermsCount);
         }
     }
-    public record TermRequest : IRequest<Term>;
+    public record TermRequest(int TermsCount) : IRequest<List<Term>?>;
 }
